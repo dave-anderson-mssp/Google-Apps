@@ -2,6 +2,7 @@ library(officer)
 library(magrittr)
 library(tidyverse)
 library(kableExtra)
+library(benford.analysis)
 
 
 google <- read_csv('non-repeat-apps.csv')
@@ -54,9 +55,19 @@ pres1 %<>% add_slide(layout = "Title and Content", master = "Gallery") %>%
   ph_with_text(type = "title", str = "Categories") %>% 
   ph_with_text(type = "body", str = "While the 'Family' category has the most apps, we see that 'Games', 'Communication' and 'Social Media' dominate the downloads") %>% 
   ph_with_gg_at(gg3,width = 8,height = 4,left = 3,top = 3.5)
-print(pres1, target = "google apps.pptx")
 
 #Slide 6
-pres1 %<>% add_slide(layout = "Title and Content", master = "Gallery") %>% 
+
+
+pres1 %<>% add_slide(layout = "Two Content", master = "Gallery") %>% 
   ph_with_text(type = "title", str = "Benford Analysis") %>% 
-  ph_with_text(type = "content", str = "Searching for apps with false reviews")
+  ph_with_text(type = "body", str = "Searching for apps with false reviews with Benford Analysis, we see that the distribution of digits is actually fairly consistent with Benford's Law. When searching for suspicious apps, I examined the suspect list from Benford's analysis. Each apps' ratio of reviews to installs was used to create the top suspect apps for false reviews.") %>% 
+  ph_with_img_at('Rplot.png',width = 6,height = 4, left = .5, top = 2)
+
+
+
+
+print(pres1, target = "google apps.pptx")
+
+
+
