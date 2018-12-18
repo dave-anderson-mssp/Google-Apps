@@ -19,7 +19,8 @@ ui <- dashboardPage(skin = "red",
                         menuItem("Data Overview", icon = icon("google-play"),
                           menuSubItem("Categories",tabName = "cats",icon = icon("table")),
                           menuSubItem("Reviews/Ratings",tabName = "rr",icon = icon("star")),
-                          menuSubItem("Games",tabName = "games",icon = icon("gamepad"))),
+                          menuSubItem("Games",tabName = "games",icon = icon("gamepad")),
+                          menuSubItem("Reviews Distribution",tabName = "review",icon = icon("chart-line"))),
                         menuItem("Individual App Information", tabName = "apps", icon = icon("podcast"))
                       )
                     ),
@@ -93,6 +94,14 @@ ui <- dashboardPage(skin = "red",
                           fluidRow(
                             plotOutput("plot3")
                           )
+                        ),
+                        tabItem(
+                          tabName = "review",
+                          fluidRow(
+                            box(sliderInput("slider1","Min",0,10000000,0)),
+                            box(sliderInput("slider2","Max",1,10000000,1000))
+                          ),
+                          fluidRow(plotOutput("plot4"))
                         )
                       )
                     )
@@ -126,12 +135,13 @@ server = function(input, output){
   })
   
   output$plot1 <- renderPlot({
-    app_reviews <- reviews %>% filter(App == input$app) %>% unnest_tokens(word, Translated_Review)
+    app_reviews <- reviews %>% filter(App == input$app)
+    app_reviews <-  app_reviews %>% unnest_tokens(word, Translated_Review)
     app_reviews <- app_reviews %>% anti_join(stop_words) %>% filter(word != 'nan')
     d <- app_reviews %>% count(word, sort = TRUE)
     
     wordcloud(words = d$word, freq = d$n, min.freq = 1,
-              max.words=200, random.order=FALSE, rot.per=0.35, 
+              max.words=100, random.order=FALSE, rot.per=0.35, 
               colors=brewer.pal(8, "Dark2"))
   })
   
@@ -164,6 +174,10 @@ server = function(input, output){
   output$plot3 <- renderPlot({
     games <- google %>% filter(Category == "GAME")
     ggplot(games)+geom_bar(aes(Genres),fill = 'dodgerblue')+theme(axis.text.x = element_text(angle = 75, hjust = 1))
+  })
+  
+  output$plot4 <- renderPlot({
+    ggplot(google,aes(Reviews))+geom_histogram(bins = 30, fill = "dodgerblue")+xlim(input$slider1,input$slider2)
   })
 }
 
