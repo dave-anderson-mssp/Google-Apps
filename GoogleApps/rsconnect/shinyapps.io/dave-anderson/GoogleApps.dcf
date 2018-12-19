@@ -5,8 +5,8 @@ account: dave-anderson
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 619249
-bundleId: 1769885
+bundleId: 1772183
 url: https://dave-anderson.shinyapps.io/GoogleApps/
-when: 1545108836.34471
+when: 1545182107.39079
 asMultiple: FALSE
 asStatic: FALSE

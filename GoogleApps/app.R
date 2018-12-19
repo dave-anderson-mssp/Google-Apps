@@ -5,6 +5,8 @@ library(shinydashboard)
 library(tidyverse)
 library(shinyWidgets)
 library(kableExtra)
+library(tidytext)
+library(wordcloud)
 
 
 google <- read_csv('non-repeat-apps.csv')
